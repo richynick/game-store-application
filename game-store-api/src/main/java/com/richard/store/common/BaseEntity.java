@@ -18,7 +18,6 @@ public class BaseEntity {
 
 
     @Id
-    //    UUID = Universal Unique ID
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 

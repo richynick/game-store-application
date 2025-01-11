@@ -3,8 +3,8 @@ services:
     container_name: postgres-gs-api
     image: postgres
     environment:
-      POSTGRES_USER: username
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: root_user
+      POSTGRES_PASSWORD: Automatic_01
       PGDATA: /var/lib/postgresql/data
       POSTGRES_DB: game_store_app_db
     volumes:

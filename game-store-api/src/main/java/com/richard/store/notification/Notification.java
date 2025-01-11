@@ -3,6 +3,9 @@ package com.richard.store.notification;
 import com.richard.store.common.BaseEntity;
 import com.richard.store.user.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,4 +22,6 @@ public class Notification extends BaseEntity {
     private String receiver;
     private NotificationLevel level;
     private NotificationStatus status;
+    @ManyToOne
+    private User user;
 }
