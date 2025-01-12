@@ -3,7 +3,9 @@ package com.richard.store.game;
 import com.richard.store.common.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -94,5 +96,68 @@ public class GameService {
         List<Game> myGame = gameRepository.findAll(example);
 
     }
+
+     /*
+    QueryByExampleExecutor LIMITATIONS
+    1- Nesting and grouping statements are not supported
+        => select * from game where (title = ?0 and supportedPlatforms = ?1) OR coverPicture is not null
+
+    2- String matching only includes exact, case-sensitive, starts, ends, contains and regex
+    3- All types other than String are exact-match only
+     */
+
+    public void specificationExample1() {
+
+        Specification<Game> spec = buildSpecificationWithAndOperator("witcher", SupportedPlatforms.PC);
+        List<Game> games = gameRepository.findAll(spec);
+
+    }
+    public void specificationExample2() {
+
+        Specification<Game> spec = buildSpecificationWithOrOperator("witcher", SupportedPlatforms.PC);
+        List<Game> games = gameRepository.findAll(spec);
+
+    }
+
+    private Specification<Game> buildSpecificationWithOrOperator(String title, SupportedPlatforms platform) {
+        Specification<Game> spec = Specification.where(null);
+
+        if (StringUtils.hasLength(title)) {
+            spec = spec.and(GameSpecification.byGameTitle(title));
+
+        }
+        if (platform != null) {
+            spec = spec.or(GameSpecification.bySupportedPlatform(platform));
+
+        }
+
+
+        return spec;
+    }
+
+    private Specification<Game> buildSpecificationWithAndOperator(String title, SupportedPlatforms platform) {
+        Specification<Game> spec = Specification.where(null);
+
+        if (StringUtils.hasLength(title)) {
+            spec = spec.and(GameSpecification.byGameTitle(title));
+
+        }
+        if (platform != null) {
+            spec = spec.and(GameSpecification.bySupportedPlatform(platform));
+
+        }
+
+
+        return spec;
+    }
+
+    // 1- class (GameRepresentation1) (id, title, platforms)
+    // 2- call the game repository and fetch all the games (paged)
+    // 3- map the result (loop over the result from the DB, do the mapping, collect, return the result)
+
+    public List<GameRepresentation1> getGamesWithRep1() {
+        return gameRepository.findAllGames();
+    }
+
 
 }
