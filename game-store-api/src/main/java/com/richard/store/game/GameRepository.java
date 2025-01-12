@@ -1,6 +1,8 @@
 package com.richard.store.game;
 
 import com.richard.store.category.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,7 +24,7 @@ public interface GameRepository extends JpaRepository<Game, String> {
         inner join game g on g.category_id = c.id
         where c.name = 'Action'
      */
-    List<Game> findAllByCategoryName(String categoryName);
+    Page<Game> findAllByCategoryName(String categoryName, Pageable pageable);
 
     // JPQL
     /*@Query("""
